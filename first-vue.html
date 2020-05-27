@@ -80,10 +80,10 @@
                                 <label for="state">State:</label>
                                 <select id="state" name="state" v-model="order.state" class="form-control">
                                     <option disabled value="">State</option>
-                                    <option>AL</option>
-                                    <option>AR</option>
-                                    <option>CA</option>
-                                    <option>NV</option>
+                                    <option v-bind:value="states.AL">AL</option>
+                                    <option v-bind:value="states.AR">AR</option>
+                                    <option v-bind:value="states.CA">CA</option>
+                                    <option v-bind:value="states.NV">NV</option>
                                 </select>
                             </div>
                         </div>
@@ -94,21 +94,39 @@
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-6 offset-md-3 form-check check-fix">                                
-                                <input type="checkbox" id="gift" value="" name="gift" class="form-check-input" v-model="order.gift" class="form-control" />
-                                <label for="gift" class="form-check-label">Ship As Gift?</label>
+                            <div class="col-6 offset-md-3">
+                                <div class="form-check">
+                                    <input type="checkbox" id="gift" value="" name="gift" class="form-check-input"
+                                           v-bind:true-value="order.sendGift"
+                                           v-bind:false-value="order.dontSendGift"
+                                           v-model="order.gift" class="form-control" />
+                                    <label for="gift" class="form-check-label">Ship As Gift?</label>
+                                </div>
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-6 offset-md-3 form-check check-fix">                                
-                                <input type="radio" class="form-check-input" id="home" name="method" value="Home" v-model="order.method" class="form-control" />
-                                <label for="home" class="form-check-label">Home</label>
+                            <div class="col-6 offset-md-3">
+                                <div class="form-check">
+                                    <input type="radio" class="form-check-input" id="home" name="method" value="Home"
+                                           v-bind:value="order.home"
+                                           v-model="order.method"/>
+                                    <label for="home" class="form-check-label">Home</label>
+                                </div>
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-6 offset-md-3 form-check check-fix">                                
-                                <input type="radio" class="form-check-input" id="business" name="method" value="Buisness" v-model="order.method" class="form-control" />
-                                <label for="business" class="form-check-label">Business</label>
+                            <div class="col-6 offset-md-3">
+                                <div class="form-check">
+                                    <input type="radio" class="form-check-input" id="business" name="method" value="Buisness"
+                                           v-bind:value="order.business"
+                                           v-model="order.method"/>
+                                    <label for="business" class="form-check-label">Business</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-6 offset-md-3">
+                                <button type="submit" class="btn btn-primary submit" @click="submitForm">Place Order</button>
                             </div>
                         </div>
                         <div class="row">
@@ -153,8 +171,18 @@
                     city: '',
                     zip: '',
                     state: '',
-                    gift: false,
-                    method: 'Home'
+                    gift: 'Send As A Gift',
+                    sendGift: 'Send As A Gift',
+                    dontSendGift: 'Do Not Send As A Gift',
+                    method: 'Home Address',
+                    business: 'Business Address',
+                    home: 'Home Address'
+                },
+                states: {
+                    AL: 'Alabama',
+                    AR: 'Arizona',
+                    CA: 'California',
+                    NV: 'Nevada'
                 }
             },
             filters: {
@@ -180,6 +208,9 @@
                 },
                 showCheckout() {
                     this.showProduct = !this.showProduct;
+                },
+                submitForm() {
+                    alert('Submitted');
                 }
             },
             computed: {
