@@ -46,3 +46,7 @@ main .container {
 .cart-icon {
     margin: .25em 1em;
 }
+
+.check-fix {
+    padding-left: 15px!important;
+}

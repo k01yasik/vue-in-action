@@ -17,9 +17,9 @@
                 </div>
             </div>
         </header>
-        <div class="container cart">
+        <div class="container cart" v-show="showProduct">
             <div class="row cart-row">
-                <nav class="navbar navbar-expand-lg navbar-light bg-light cart-nav">
+                <nav class="navbar navbar-expand-lg navbar-light bg-light cart-nav" @click="showCheckout">
                     <div class="navbar-nav">
                         <span v-cloak>{{ cartItemCount }}</span>
                         <svg class="bi bi-cart-check cart-icon" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
@@ -34,23 +34,102 @@
         <main>
             <div class="container">
                 <div class="row product">
-                    <div class="col-4">
-                        <figure>
-                            <img v-bind:src="product.image">
-                        </figure>
+                    <div class="col-12" v-if="showProduct">
+                        <div class="row">
+                            <div class="col-4">
+                                <figure>
+                                    <img v-bind:src="product.image">
+                                </figure>
+                            </div>
+                            <div class="col-8 col-expand">
+                                <h1 v-text="product.title"></h1>
+                                <p v-html="product.description"></p>
+                                <p class="price" v-cloak>{{ product.price | formatPrice }}</p>
+                                <button type="button" class="btn btn-primary" @click="addToCart" v-if="canAddToCart">Add to cart</button>
+                                <button type="button" class="btn btn-primary disabled" v-else="canAddToCart" v-cloak>Add to cart</button>
+                            </div>
+                        </div>
                     </div>
-                    <div class="col-8 col-expand">
-                        <h1 v-text="product.title"></h1>
-                        <p v-html="product.description"></p>
-                        <p class="price" v-cloak>{{ product.price | formatPrice }}</p>
-                        <button type="button" class="btn btn-primary" @click="addToCart" v-if="canAddToCart">Add to cart</button>
-                        <button type="button" class="btn btn-primary disabled" v-else="canAddToCart">Add to cart</button>
+                    <div class="col-12" v-else="showProduct" v-cloak>
+                        <div class="row">
+                            <div class="col-6 offset-md-3">
+                                <label for="firstName">First Name:</label>
+                                <input id="firstName" name="firstName" v-model="order.firstName" class="form-control" />
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-6 offset-md-3">
+                                <label for="lastName">Last Name:</label>
+                                <input id="lastName" name="lastName" v-model="order.lastName" class="form-control" />
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-6 offset-md-3">
+                                <label for="adress">Adress:</label>
+                                <input id="adress" name="adress" v-model="order.adress" class="form-control" />
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-6 offset-md-3">
+                                <label for="city">City:</label>
+                                <input id="city" name="city" v-model="order.city" class="form-control" />
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-6 offset-md-3">
+                                <label for="state">State:</label>
+                                <select id="state" name="state" v-model="order.state" class="form-control">
+                                    <option disabled value="">State</option>
+                                    <option>AL</option>
+                                    <option>AR</option>
+                                    <option>CA</option>
+                                    <option>NV</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-6 offset-md-3">
+                                <label for="zip">Zip / Postal Code:</label>
+                                <input id="zip" name="zip" v-model="order.zip" class="form-control" />
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-6 offset-md-3 form-check check-fix">                                
+                                <input type="checkbox" id="gift" value="" name="gift" class="form-check-input" v-model="order.gift" class="form-control" />
+                                <label for="gift" class="form-check-label">Ship As Gift?</label>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-6 offset-md-3 form-check check-fix">                                
+                                <input type="radio" class="form-check-input" id="home" name="method" value="Home" v-model="order.method" class="form-control" />
+                                <label for="home" class="form-check-label">Home</label>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-6 offset-md-3 form-check check-fix">                                
+                                <input type="radio" class="form-check-input" id="business" name="method" value="Buisness" v-model="order.method" class="form-control" />
+                                <label for="business" class="form-check-label">Business</label>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-12">
+                                <pre v-cloak>
+                                    First Name: {{order.firstName}}
+                                    Last Name: {{order.lastName}}
+                                    Address: {{order.address}}
+                                    City: {{order.city}}
+                                    Zip: {{order.zip}}
+                                    State: {{order.state}}
+                                    Method: {{order.method}}
+                                    Gift: {{order.gift}}
+                                </pre>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>            
         </main>
     </div>
-
     <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
     <script type="text/javascript">
         var webstore = new Vue({
@@ -66,7 +145,17 @@
                     availableInventory: 5
                 },
                 cart: [],
-                showProduct: true
+                showProduct: true,
+                order: {
+                    firstName: '',
+                    lastName: '',
+                    address: '',
+                    city: '',
+                    zip: '',
+                    state: '',
+                    gift: false,
+                    method: 'Home'
+                }
             },
             filters: {
                 formatPrice: function(price) {
@@ -89,7 +178,7 @@
                 addToCart: function() {
                     this.cart.push( this.product.id );
                 },
-                showCheckout: function () {
+                showCheckout() {
                     this.showProduct = !this.showProduct;
                 }
             },
