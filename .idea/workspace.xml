@@ -37,6 +37,10 @@
         <option value="$PROJECT_DIR$/.idea/misc.xml" />
         <option value="$PROJECT_DIR$/.idea/vcs.xml" />
         <option value="$PROJECT_DIR$/.idea/modules.xml" />
+        <option value="$PROJECT_DIR$/.idea/vue-in-action.iml" />
+        <option value="$PROJECT_DIR$/.idea/misc.xml" />
+        <option value="$PROJECT_DIR$/.idea/vcs.xml" />
+        <option value="$PROJECT_DIR$/.idea/modules.xml" />
       </list>
     </option>
   </component>
@@ -72,6 +76,7 @@
       <updated>1590509386837</updated>
       <workItem from="1590509388996" duration="6622000" />
       <workItem from="1590607844887" duration="4051000" />
+      <workItem from="1590693242379" duration="1967000" />
     </task>
     <servers />
   </component>
