@@ -36,7 +36,7 @@
             <div class="container">
                 <div class="row product">
                     <div class="col-12" v-if="showProduct">
-                        <div class="row product-element" v-for="product in products">
+                        <div class="row product-element" v-for="product in sortedProducts">
                             <div class="col-4">
                                 <figure>
                                     <img v-bind:src="product.image">
@@ -51,11 +51,11 @@
                                 @click="addToCart(product)" v-if="canAddToCart(product)">Add to cart</button>
                                 <button type="button" class="btn btn-primary disabled add-button" 
                                 v-else v-cloak>Add to cart</button>
-                                <span class="inventory-message" v-if="product.availableInventory - cartItemCount === 0" v-cloak>
+                                <span class="inventory-message" v-if="product.availableInventory - cartCount(product.id) === 0" v-cloak>
                                     All Out!
                                 </span>
-                                <span class="inventory-message" v-else-if="product.availableInventory - cartItemCount < 5" v-cloak>
-                                    Only {{product.availableInventory - cartItemCount}} left!
+                                <span class="inventory-message" v-else-if="product.availableInventory - cartCount(product.id) < 5" v-cloak>
+                                    Only {{product.availableInventory - cartCount(product.id)}} left!
                                 </span>
                                 <span class="inventory-message" v-else v-cloak>Buy Now!</span>
                                 <div class="rating" v-cloak>
@@ -219,7 +219,6 @@
                 axios.get('./products.json')
                     .then((response) => {
                         this.products = response.data.products;
-                        console.log(this.products);
                     });
             },
             methods: {
@@ -236,12 +235,26 @@
                     return myProduct.rating - n >= 0;
                 },
                 canAddToCart: function (product) {
-                    return product.availableInventory > this.cartItemCount;
+                    return product.availableInventory > this.cartCount(product.id);
+                },
+                cartCount(id) {
+                    return this.cart.filter(item => item === id).length || 0;
                 }
             },
             computed: {
                 cartItemCount: function () {
                     return this.cart.length || 0;
+                },
+                sortedProducts() {
+                    if (this.products.length > 0) {
+                        let productsArray = this.products.slice(0);
+                        function compare(a, b) {
+                            if (a.title.toLowerCase() < b.title.toLowerCase()) return -1;
+                            if (a.title.toLowerCase() > b.title.toLowerCase()) return 1;
+                            return 0;
+                        }
+                        return productsArray.sort(compare);
+                    }
                 }
             }
         });
